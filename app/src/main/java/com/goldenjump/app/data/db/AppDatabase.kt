@@ -4,7 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [EmployeeEntity::class, ExtraItemEntity::class],
+    entities = [
+        EmployeeEntity::class,
+        ExtraItemEntity::class
+    ],
     version = 1,
     exportSchema = false
 )

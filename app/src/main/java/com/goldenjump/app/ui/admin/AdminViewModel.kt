@@ -11,27 +11,48 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AdminViewModel : ViewModel() {
+
     private val repo = AppGraph.adminRepo
 
     val employees: StateFlow<List<EmployeeEntity>> =
-        repo.observeEmployees().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+        repo.observeEmployees()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val extraItems: StateFlow<List<ExtraItemEntity>> =
-        repo.observeExtraItems().stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+        repo.observeExtraItems()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     init {
         viewModelScope.launch { repo.seedIfNeeded() }
     }
 
-    fun saveEmployee(id: Long?, name: String, number: String, position: String, isActive: Boolean) {
-        viewModelScope.launch { repo.upsertEmployee(id, name, number, position, isActive) }
+    fun saveEmployee(
+        id: Long?,
+        name: String,
+        number: String,
+        position: String,
+        isActive: Boolean
+    ) {
+        viewModelScope.launch {
+            repo.upsertEmployee(id, name, number, position, isActive)
+        }
     }
 
     fun toggleEmployee(id: Long, active: Boolean) {
-        viewModelScope.launch { repo.setEmployeeActive(id, active) }
+        viewModelScope.launch {
+            repo.setEmployeeActive(id, active)
+        }
     }
 
     fun updatePrice(id: Long, price: Double) {
-        viewModelScope.launch { repo.updateExtraPrice(id, price) }
+        viewModelScope.launch {
+            repo.updateExtraPrice(id, price)
+        }
+    }
+
+    fun setIncluded(id: Long, included: Boolean) {
+        viewModelScope.launch {
+            repo.setExtraIncluded(id, included)
+        }
     }
 }

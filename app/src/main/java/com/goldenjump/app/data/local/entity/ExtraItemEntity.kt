@@ -1,4 +1,4 @@
-package com.goldenjump.app.data.db
+package com.goldenjump.app.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.Index
@@ -13,6 +13,6 @@ data class ExtraItemEntity(
     val key: String,
     val name: String,
     val unitPrice: Double,
-    val isIncluded: Boolean,
+    val isIncluded: Boolean = true,
     val updatedAt: Long
 )
