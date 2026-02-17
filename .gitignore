@@ -1,15 +1,57 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Gradle
+.gradle/
+build/
+
+# Local configuration
 local.properties
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Android Studio captures
+captures/
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Generated files
+bin/
+gen/
+out/
+
+# Kotlin
+.kotlin/
+
+# Log files
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# APKs
+*.apk
+*.aab
+
+# Keystore files
+*.jks
+*.keystore
+
+# Signing
+signingConfigs/
+
+# Navigation Safe Args
+.navigation/
+
+# Room schema export (si luego lo activamos)
+schemas/
+
+# Compose preview cache
+.compose/
+
+# Misc
+*.orig
