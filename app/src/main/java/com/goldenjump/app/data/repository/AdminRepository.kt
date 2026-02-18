@@ -13,9 +13,7 @@ class AdminRepository(
     // EMPLOYEES
     // =========================
 
-    fun observeEmployees(): Flow<List<EmployeeEntity>> {
-        return db.employeeDao().observeAll()
-    }
+    fun observeEmployees(): Flow<List<EmployeeEntity>> = db.employeeDao().observeAll()
 
     suspend fun upsertEmployee(
         id: Long?,
@@ -26,13 +24,6 @@ class AdminRepository(
     ) {
         val now = System.currentTimeMillis()
 
-        // Si es edición, conserva el createdAt original (si existe)
-        val createdAt = if (id == null) {
-            now
-        } else {
-            db.employeeDao().getById(id)?.createdAt ?: now
-        }
-
         db.employeeDao().upsert(
             EmployeeEntity(
                 id = id ?: 0L,
@@ -40,7 +31,7 @@ class AdminRepository(
                 employeeNumber = number,
                 position = position,
                 isActive = isActive,
-                createdAt = createdAt
+                createdAt = now
             )
         )
     }
@@ -53,9 +44,7 @@ class AdminRepository(
     // EXTRA ITEMS
     // =========================
 
-    fun observeExtraItems(): Flow<List<ExtraItemEntity>> {
-        return db.extraItemDao().observeAll()
-    }
+    fun observeExtraItems(): Flow<List<ExtraItemEntity>> = db.extraItemDao().observeAll()
 
     suspend fun updateExtraPrice(id: Long, price: Double) {
         db.extraItemDao().updatePrice(
@@ -111,66 +100,16 @@ class AdminRepository(
         }
 
         if (db.extraItemDao().count() == 0) {
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "tocino",
-                    name = "Tocino",
-                    unitPrice = 0.0,
-                    isIncluded = true,
-                    updatedAt = now
-                )
+            val items = listOf(
+                ExtraItemEntity(key = "tocino", name = "Tocino", unitPrice = 0.0, isIncluded = true, updatedAt = now),
+                ExtraItemEntity(key = "papas_grandes", name = "Papas Grandes (McTrio)", unitPrice = 0.0, isIncluded = true, updatedAt = now),
+                ExtraItemEntity(key = "coberturas", name = "Coberturas Extras", unitPrice = 0.0, isIncluded = true, updatedAt = now),
+                ExtraItemEntity(key = "salchicha", name = "Salchicha", unitPrice = 0.0, isIncluded = true, updatedAt = now),
+                ExtraItemEntity(key = "queso", name = "Queso", unitPrice = 0.0, isIncluded = true, updatedAt = now),
+                ExtraItemEntity(key = "conos_dobles", name = "Conos Dobles", unitPrice = 0.0, isIncluded = false, updatedAt = now)
             )
 
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "papas_grandes",
-                    name = "Papas Grandes (McTrio)",
-                    unitPrice = 0.0,
-                    isIncluded = true,
-                    updatedAt = now
-                )
-            )
-
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "coberturas",
-                    name = "Coberturas Extras",
-                    unitPrice = 0.0,
-                    isIncluded = true,
-                    updatedAt = now
-                )
-            )
-
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "salchicha",
-                    name = "Salchicha",
-                    unitPrice = 0.0,
-                    isIncluded = true,
-                    updatedAt = now
-                )
-            )
-
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "queso",
-                    name = "Queso",
-                    unitPrice = 0.0,
-                    isIncluded = true,
-                    updatedAt = now
-                )
-            )
-
-            // CONOS DOBLES NO ENTRAR
-            db.extraItemDao().insert(
-                ExtraItemEntity(
-                    key = "conos_dobles",
-                    name = "Conos Dobles",
-                    unitPrice = 0.0,
-                    isIncluded = false,
-                    updatedAt = now
-                )
-            )
+            items.forEach { db.extraItemDao().upsert(it) }
         }
     }
 }

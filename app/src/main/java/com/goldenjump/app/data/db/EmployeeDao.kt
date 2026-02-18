@@ -15,9 +15,6 @@ interface EmployeeDao {
     @Query("SELECT COUNT(*) FROM employees")
     suspend fun count(): Int
 
-    @Query("SELECT * FROM employees WHERE id = :id LIMIT 1")
-    suspend fun getById(id: Long): EmployeeEntity?
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entity: EmployeeEntity): Long
 

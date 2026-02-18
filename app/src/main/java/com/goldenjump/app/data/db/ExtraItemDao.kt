@@ -16,19 +16,11 @@ interface ExtraItemDao {
     suspend fun count(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entity: ExtraItemEntity): Long
+    suspend fun upsert(entity: ExtraItemEntity): Long
 
-    @Query("""
-        UPDATE extra_items
-        SET unitPrice = :price, updatedAt = :updatedAt
-        WHERE id = :id
-    """)
+    @Query("UPDATE extra_items SET unitPrice = :price, updatedAt = :updatedAt WHERE id = :id")
     suspend fun updatePrice(id: Long, price: Double, updatedAt: Long)
 
-    @Query("""
-        UPDATE extra_items
-        SET isIncluded = :included, updatedAt = :updatedAt
-        WHERE id = :id
-    """)
+    @Query("UPDATE extra_items SET isIncluded = :included, updatedAt = :updatedAt WHERE id = :id")
     suspend fun setIncluded(id: Long, included: Boolean, updatedAt: Long)
 }

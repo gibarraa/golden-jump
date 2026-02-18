@@ -2,57 +2,73 @@ package com.goldenjump.app.ui.admin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.goldenjump.app.data.AppGraph
 import com.goldenjump.app.data.db.EmployeeEntity
 import com.goldenjump.app.data.db.ExtraItemEntity
+import com.goldenjump.app.data.repository.AdminRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class AdminViewModel : ViewModel() {
-
-    private val repo = AppGraph.adminRepo
+class AdminViewModel(
+    private val repository: AdminRepository
+) : ViewModel() {
 
     val employees: StateFlow<List<EmployeeEntity>> =
-        repo.observeEmployees()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+        repository.observeEmployees()
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
+            )
 
     val extraItems: StateFlow<List<ExtraItemEntity>> =
-        repo.observeExtraItems()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    init {
-        viewModelScope.launch { repo.seedIfNeeded() }
-    }
+        repository.observeExtraItems()
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
+            )
 
     fun saveEmployee(
         id: Long?,
         name: String,
         number: String,
         position: String,
-        isActive: Boolean
+        active: Boolean
     ) {
         viewModelScope.launch {
-            repo.upsertEmployee(id, name, number, position, isActive)
+            repository.upsertEmployee(
+                id = id,
+                name = name,
+                number = number,
+                position = position,
+                isActive = active
+            )
         }
     }
 
     fun toggleEmployee(id: Long, active: Boolean) {
         viewModelScope.launch {
-            repo.setEmployeeActive(id, active)
+            repository.setEmployeeActive(id, active)
         }
     }
 
-    fun updatePrice(id: Long, price: Double) {
+    fun updateExtraPrice(id: Long, price: Double) {
         viewModelScope.launch {
-            repo.updateExtraPrice(id, price)
+            repository.updateExtraPrice(id, price)
         }
     }
 
-    fun setIncluded(id: Long, included: Boolean) {
+    fun setExtraIncluded(id: Long, included: Boolean) {
         viewModelScope.launch {
-            repo.setExtraIncluded(id, included)
+            repository.setExtraIncluded(id, included)
+        }
+    }
+
+    fun seedIfNeeded() {
+        viewModelScope.launch {
+            repository.seedIfNeeded()
         }
     }
 }

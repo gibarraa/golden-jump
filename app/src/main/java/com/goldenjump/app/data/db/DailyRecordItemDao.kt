@@ -1,15 +1,15 @@
-package com.goldenjump.app.data.local.dao
+package com.goldenjump.app.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.goldenjump.app.data.local.entity.DailyRecordItemEntity
+import com.goldenjump.app.data.db.DailyRecordItemEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DailyRecordItemDao {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.Companion.ABORT)
     suspend fun insertAll(items: List<DailyRecordItemEntity>)
 
     @Query("DELETE FROM daily_record_items WHERE recordId = :recordId")

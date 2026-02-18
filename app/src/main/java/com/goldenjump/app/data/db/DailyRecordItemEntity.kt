@@ -1,4 +1,4 @@
-package com.goldenjump.app.data.local.entity
+package com.goldenjump.app.data.db
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
             entity = DailyRecordEntity::class,
             parentColumns = ["id"],
             childColumns = ["recordId"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.Companion.CASCADE
         )
     ],
     indices = [Index(value = ["recordId"]), Index(value = ["extraKey"])]

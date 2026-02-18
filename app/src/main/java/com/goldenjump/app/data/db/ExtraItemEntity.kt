@@ -9,7 +9,8 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["key"], unique = true)]
 )
 data class ExtraItemEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val key: String,
     val name: String,
     val unitPrice: Double,
